@@ -174,6 +174,8 @@ export function FilterBar({
           dayDate={filters.dayDate}
           fromWeek={filters.fromWeek}
           toWeek={filters.toWeek}
+          defaultFromWeek={defaultFromWeek}
+          defaultToWeek={defaultToWeek}
           onChange={set}
         />
       </FilterGroup>
@@ -278,15 +280,17 @@ export function FilterBar({
 /* ── DateRangeFilter ─────────────────────────────────────────────────────── */
 
 interface DateRangeFilterProps {
-  weeks:    Week[];
-  dayMode:  'day' | 'week';
-  dayDate:  string;
-  fromWeek: string;
-  toWeek:   string;
+  weeks:           Week[];
+  dayMode:         'day' | 'week';
+  dayDate:         string;
+  fromWeek:        string;
+  toWeek:          string;
+  defaultFromWeek: string;
+  defaultToWeek:   string;
   onChange: (patch: Partial<Filters>) => void;
 }
 
-function DateRangeFilter({ weeks, dayMode, dayDate, fromWeek, toWeek, onChange }: DateRangeFilterProps) {
+function DateRangeFilter({ weeks, dayMode, dayDate, fromWeek, toWeek, defaultFromWeek, defaultToWeek, onChange }: DateRangeFilterProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [popupOpen, setPopupOpen] = useState(false);
 
