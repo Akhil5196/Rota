@@ -76,18 +76,21 @@ interface Props {
   milestones: Milestone[];
   viewMode: ViewMode;
   onViewModeChange: (m: ViewMode) => void;
+  defaultFromWeek: string;
+  defaultToWeek: string;
 }
 
 export function FilterBar({
   filters, onFiltersChange,
   weeks, pmos, implLeads, milestones,
   viewMode, onViewModeChange,
+  defaultFromWeek, defaultToWeek,
 }: Props) {
   const set = (partial: Partial<Filters>) => onFiltersChange({ ...filters, ...partial });
 
   const isFullRange =
-    filters.fromWeek === weeks[0]?.id &&
-    filters.toWeek   === weeks[weeks.length - 1]?.id;
+    filters.fromWeek === defaultFromWeek &&
+    filters.toWeek   === defaultToWeek;
 
   const hasActive =
     !!filters.search ||
@@ -248,8 +251,8 @@ export function FilterBar({
           <button
             onClick={() => onFiltersChange({
               search: '', statuses: [], pmoIds: [], implLeadIds: [], milestoneIds: [],
-              fromWeek: weeks[0]?.id ?? '',
-              toWeek:   weeks[weeks.length - 1]?.id ?? '',
+              fromWeek: defaultFromWeek,
+              toWeek:   defaultToWeek,
               dayDate:  '',
               dayMode:  'week',
               region:   'UK',
@@ -323,7 +326,7 @@ function DateRangeFilter({ weeks, dayMode, dayDate, fromWeek, toWeek, onChange }
   }
 
   const label    = weekLabel();
-  const isActive = !isWeekMode || fromWeek !== weeks[0]?.id || toWeek !== weeks[weeks.length - 1]?.id;
+  const isActive = !isWeekMode || fromWeek !== defaultFromWeek || toWeek !== defaultToWeek;
 
   function handleModeChange(mode: 'day' | 'week') {
     onChange({ dayMode: mode });
@@ -366,7 +369,7 @@ function DateRangeFilter({ weeks, dayMode, dayDate, fromWeek, toWeek, onChange }
             role="button"
             onClick={e => {
               e.stopPropagation();
-              onChange({ fromWeek: weeks[0]?.id ?? '', toWeek: weeks[weeks.length - 1]?.id ?? '', dayMode: 'week' });
+              onChange({ fromWeek: defaultFromWeek, toWeek: defaultToWeek, dayMode: 'week' });
               setPopupOpen(false);
             }}
             style={{

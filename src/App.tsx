@@ -17,6 +17,18 @@ import { GoLiveDatePicker }  from './components/GoLiveDatePicker';
 const MAX_PER_CELL   = 3;
 const COL_PAGE_SIZE  = 4;
 
+/** Returns the index of the week that contains today, or 0 if today is before all weeks. */
+function currentWeekIndex(): number {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  // Walk backwards from the end — the last week whose startDate ≤ today is the current week.
+  for (let i = SEED_WEEKS.length - 1; i >= 0; i--) {
+    const start = new Date(SEED_WEEKS[i].startDate + 'T00:00:00');
+    if (start <= today) return i;
+  }
+  return 0; // today is before all weeks — show from the first week
+}
+
 type PanelState = { type: 'edit'; id: string } | null;
 
 export default function App() {
@@ -31,8 +43,8 @@ export default function App() {
   const [legendOpen, setLegendOpen] = useState(false);
   const [filters, setFilters]     = useState<Filters>({
     search: '', statuses: [], pmoIds: [], implLeadIds: [], milestoneIds: [],
-    fromWeek: SEED_WEEKS[0].id,
-    toWeek:   SEED_WEEKS[SEED_WEEKS.length - 1].id,
+    fromWeek: SEED_WEEKS[currentWeekIndex()].id,       // resolved to defaultFromWeek after mount
+    toWeek:   SEED_WEEKS[Math.min(currentWeekIndex() + 11, SEED_WEEKS.length - 1)].id,  // defaultToWeek
     dayDate:  '',    // only used in day mode
     dayMode:  'week',
     region:   'UK',
@@ -92,6 +104,10 @@ export default function App() {
   const weeks     = SEED_WEEKS;
   const pmos      = SEED_PMOS;
   const implLeads = SEED_IMPL_LEADS;
+
+  const curIdx          = currentWeekIndex();
+  const defaultFromWeek = SEED_WEEKS[curIdx].id;
+  const defaultToWeek   = SEED_WEEKS[Math.min(curIdx + 11, SEED_WEEKS.length - 1)].id;
 
   /* ── Column pagination (switches between PMO / Impl Lead based on viewMode) ── */
   const filteredPmos = filters.pmoIds.length > 0
@@ -416,6 +432,8 @@ export default function App() {
               milestones={milestones}
               viewMode={viewMode}
               onViewModeChange={mode => { setViewMode(mode); setColPage(0); }}
+              defaultFromWeek={defaultFromWeek}
+              defaultToWeek={defaultToWeek}
             />
 
             <Grid
