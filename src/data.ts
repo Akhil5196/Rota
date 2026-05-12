@@ -113,15 +113,15 @@ export function getRules(...ids: string[]): FiredRule[] {
 
 export const SEED_MILESTONES: Milestone[] = [
   { id: 'ms1',  name: 'Pre Kick-Off Call',                  color: '#78716C', system: true },  // warm gray
-  { id: 'ms2',  name: 'Kick-Off Call/Discovery Completed',  color: '#06B6D4', system: true },  // cyan
+  { id: 'ms2',  name: 'Kick-Off Call/Discovery Completed',  color: '#EA580C', system: true },
   { id: 'ms3',  name: 'Waiting for Sandbox',                color: '#9333EA', system: true },  // purple
-  { id: 'ms4',  name: 'Sandbox Completed',                  color: '#0F766E', system: true },  // dark teal
+  { id: 'ms4',  name: 'Sandbox Completed',                  color: '#8EAB12', system: true },
   { id: 'ms5',  name: 'Internal SB Validation Completed',   color: '#D946EF', system: true },  // fuchsia
   { id: 'ms6',  name: 'Sandbox Signoff Received',           color: '#EC4899', system: true },  // pink
-  { id: 'ms7',  name: 'Interim Live Completed',             color: '#4338CA', system: true },  // indigo
+  { id: 'ms7',  name: 'Interim Live Completed',             color: '#2563EB', system: true },
   { id: 'ms8',  name: 'Interim Live Setup Completed',       color: '#0E7490', system: true },  // dark cyan
   { id: 'ms9',  name: 'Interim Live Setup Approved',        color: '#A855F8', system: true },  // violet
-  { id: 'ms10', name: 'Go-Live Completed',                  color: '#7E22CE', system: true },  // deep purple
+  { id: 'ms10', name: 'Go-Live Completed',                  color: '#1A7A42', system: true }, 
 ] as Milestone[];
 
 export const SEED_ACCOUNTS: Account[] = [

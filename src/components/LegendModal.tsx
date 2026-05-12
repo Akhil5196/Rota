@@ -37,7 +37,7 @@ export function LegendModal({ milestones, onClose }: Props) {
           display: 'flex', alignItems: 'center',
         }}>
           <span style={{ fontSize: 14, fontWeight: 700, color: '#147B8D', flex: 1 }}>
-            Milestone Legend
+            Legend
           </span>
           <button
             onClick={onClose}

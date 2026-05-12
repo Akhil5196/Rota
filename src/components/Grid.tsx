@@ -315,7 +315,7 @@ export function Grid({ weeks, rowMode, columns, milestones, visible, filters, vi
                     </div>
                     <div>
                       <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--cf-text-primary)' }}>{col.name}</div>
-                      <div style={{ fontSize: 10, color: 'var(--cf-text-quaternary)' }}>{count} account{count !== 1 ? 's' : ''}</div>
+                      <div style={{ fontSize: 10, color: 'var(--cf-text-quaternary)' }}>{count} conversion{count !== 1 ? 's' : ''}</div>
                     </div>
                   </div>
                 </th>
