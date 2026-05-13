@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import type { Filters, PMO, ImplementationLead, Week, Status, Milestone, ViewMode } from '../types';
-import { STATUS_OPTS, STATUS_COLORS, getMilestonePalette } from '../data';
+import { STATUS_OPTS, STATUS_COLORS, getMilestonePalette, APP_TODAY_ISO, getAppToday } from '../data';
 
 /* ── Date utilities (timezone-safe) ─────────────────────────────────────── */
 
@@ -9,8 +9,7 @@ function isoFromParts(y: number, m: number, d: number): string {
 }
 
 function todayIso(): string {
-  const t = new Date();
-  return isoFromParts(t.getFullYear(), t.getMonth(), t.getDate());
+  return APP_TODAY_ISO;
 }
 
 function addDays(iso: string, n: number): string {
@@ -447,9 +446,9 @@ function WeekRangePicker({ fromId, toId, weeks, onApply }: WeekRangePickerProps)
   const [hoverWeek,   setHoverWeek]   = useState<string | null>(null);
 
   /* Calendar view — two months side by side */
-  const today = new Date();
-  const [calYear,  setCalYear]  = useState(today.getFullYear());
-  const [calMonth, setCalMonth] = useState(today.getMonth());
+  const appToday = getAppToday();
+  const [calYear,  setCalYear]  = useState(appToday.getFullYear());
+  const [calMonth, setCalMonth] = useState(appToday.getMonth());
 
   const rightMonth = calMonth === 11 ? 0 : calMonth + 1;
   const rightYear  = calMonth === 11 ? calYear + 1 : calYear;
@@ -590,7 +589,7 @@ function DayCalendarPopup({
 }: { dayDate: string; onChange: (iso: string) => void }) {
   const initView = dayDate
     ? (() => { const { year, month } = parseIso(dayDate); return { year, month }; })()
-    : (() => { const t = new Date(); return { year: t.getFullYear(), month: t.getMonth() }; })();
+    : (() => { const { year, month } = parseIso(APP_TODAY_ISO); return { year, month }; })();
 
   const [view, setView] = useState(initView);
 

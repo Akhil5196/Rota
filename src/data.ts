@@ -2,6 +2,14 @@ import type { PMO, ImplementationLead, Week, Milestone, Account, AuditEntry, Not
 
 export function uid(): string { return Math.random().toString(36).slice(2, 9); }
 
+/** Fixed calendar "today" for the demo (local date, YYYY-MM-DD). */
+export const APP_TODAY_ISO = '2026-05-11';
+
+export function getAppToday(): Date {
+  const [y, m, d] = APP_TODAY_ISO.split('-').map(Number);
+  return new Date(y, m - 1, d);
+}
+
 function mkAudit(action: string, minsAgo = 0): AuditEntry {
   return { id: uid(), user: 'PMO Lead', action, ts: Date.now() - minsAgo * 60_000 };
 }

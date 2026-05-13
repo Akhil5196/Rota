@@ -3,7 +3,7 @@ import type { Account, AccountDraft, AuditEntry, Filters, NoteEntry, ViewMode, W
 import type { Milestone } from './types';
 import {
   SEED_PMOS, SEED_IMPL_LEADS, SEED_WEEKS, SEED_MILESTONES, SEED_ACCOUNTS,
-  STATUS_OPTS, uid,
+  STATUS_OPTS, uid, getAppToday, APP_TODAY_ISO,
 } from './data';
 import { TopBar }      from './components/TopBar';
 import { Sidebar }     from './components/Sidebar';
@@ -17,9 +17,9 @@ import { GoLiveDatePicker }  from './components/GoLiveDatePicker';
 const MAX_PER_CELL   = 3;
 const COL_PAGE_SIZE  = 4;
 
-/** Returns the index of the week that contains today, or 0 if today is before all weeks. */
+/** Returns the index of the week that contains the app "today", or 0 if before all weeks. */
 function currentWeekIndex(): number {
-  const today = new Date();
+  const today = getAppToday();
   today.setHours(0, 0, 0, 0);
   // Walk backwards from the end — the last week whose startDate ≤ today is the current week.
   for (let i = SEED_WEEKS.length - 1; i >= 0; i--) {
@@ -147,7 +147,7 @@ export default function App() {
     }
 
     /* Week view — current week first, upcoming only */
-    const t   = new Date();
+    const t   = getAppToday();
     const dow = t.getDay();
     t.setDate(t.getDate() + (dow === 0 ? -6 : 1 - dow));
     const todayMonday = `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}-${String(t.getDate()).padStart(2, '0')}`;
@@ -213,7 +213,7 @@ export default function App() {
         setGoLivePicker({
           accountId: drag.accountId, accountName,
           toWeekId: toRowId, toColumnId, colField,
-          initialMonthISO: targetWeek?.startDate ?? new Date().toISOString().slice(0, 10),
+          initialMonthISO: targetWeek?.startDate ?? APP_TODAY_ISO,
           colLabel:    colChanged ? colLabel    : null,
           fromColName: colChanged ? fromColName : null,
           toColName:   colChanged ? toColName   : null,
@@ -331,7 +331,7 @@ export default function App() {
         toWeekId: draft.weekId,
         toColumnId: draft.pmoId,   // not used on panel-save path
         colField: 'pmoId',         // not used on panel-save path
-        initialMonthISO: targetWeek?.startDate ?? new Date().toISOString().slice(0, 10),
+        initialMonthISO: targetWeek?.startDate ?? APP_TODAY_ISO,
         colLabel: null, fromColName: null, toColName: null,
         additionalChanges: otherChanges,
         pendingDraft: draft,
@@ -383,7 +383,7 @@ export default function App() {
       toWeekId: current.weekId,
       toColumnId: current.pmoId,
       colField: 'pmoId',
-      initialMonthISO: currentWeek?.startDate ?? new Date().toISOString().slice(0, 10),
+      initialMonthISO: currentWeek?.startDate ?? APP_TODAY_ISO,
       colLabel: null, fromColName: null, toColName: null,
       additionalChanges: [],
       pendingDraft: null,

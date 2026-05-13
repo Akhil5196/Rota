@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import type { Account } from '../types';
+import { APP_TODAY_ISO, getAppToday } from '../data';
 
 /* ─── Availability mock ──────────────────────────────────────────────────────
    In production this data comes from the rule engine / scheduling API.       */
@@ -7,7 +8,8 @@ type Avail = 'available' | 'requestable' | 'blocked' | 'weekend' | 'past';
 
 function getAvailability(iso: string): Avail {
   const d = new Date(iso + 'T00:00:00');
-  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const today = getAppToday();
+  today.setHours(0, 0, 0, 0);
   if (d.getTime() < today.getTime()) return 'past';
   const dow = d.getDay();
   if (dow === 0 || dow === 6) return 'weekend';
@@ -28,10 +30,6 @@ const AVAIL_DOT: Record<string, string> = {
 const DOW_LABELS  = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
 const MONTH_NAMES = ['January','February','March','April','May','June',
                      'July','August','September','October','November','December'];
-
-function toISO(d: Date) {
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-}
 
 function fmtDisplay(iso: string) {
   const [y, m, d] = iso.split('-');
@@ -72,7 +70,7 @@ export function GoLiveDatePicker({ accountName, initialMonthISO, accounts, colLa
   ];
   while (cells.length % 7 !== 0) cells.push(null);
 
-  const todayISO = toISO(new Date());
+  const todayISO = APP_TODAY_ISO;
 
   function prevMonth() {
     if (viewMonth === 0) { setViewYear(y => y - 1); setViewMonth(11); }
